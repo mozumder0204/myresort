@@ -35,9 +35,9 @@ exports.unauthorizedResponse = function (res, msg) {
   return res.status(401).json(data);
 };
 
-function bodyContent(IsExecuted, data, message) {
+function bodyContent(isExecuted, data, message) {
   return {
-    IsExecuted,
+    isExecuted,
     data,
     message,
   };

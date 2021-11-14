@@ -1,0 +1,233 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "My Resort API's",
+    "version": "1.0.0",
+    "title": "My Resort (Swagger)"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Resort",
+      "description": "Operations about resort"
+    }
+  ],
+  "schemes": ["http"],
+  "paths": {
+    "/resort/add": {
+      "post": {
+        "tags": ["Resort"],
+        "summary": "Create resort",
+        "description": "This api is for creating new resort",
+        "operationId": "resortCreate",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created resort object",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Resort"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "items": { "type": "object" }
+            }
+          }
+        }
+      }
+    },
+    "/resort/list": {
+      "get": {
+        "tags": ["Resort"],
+        "summary": "Resort List",
+        "description": "This api is for get all resort",
+        "operationId": "resortList",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "200": {
+                "description": "Success",
+                "schema": {
+                  "items": { "type": "object" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resort/details/{resortId}": {
+      "get": {
+        "tags": ["Resort"],
+        "summary": "Get resort by resort ID",
+        "description": "",
+        "operationId": "resortDetails",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "resortId",
+            "in": "path",
+            "description": "The resort ID that needs to be fetched.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Resort"
+            }
+          },
+          "400": {
+            "description": "No Data Found !!!"
+          }
+        }
+      }
+    },
+    "/resort/delete/{resortId}": {
+      "delete": {
+        "tags": ["Resort"],
+        "summary": "Delete Resort",
+        "description": "",
+        "operationId": "resortDelete",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "resortId",
+            "in": "path",
+            "description": "resort ID that need to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Resort Not Deleted"
+          }
+        }
+      }
+    },
+    "/resort/update/{resortId}": {
+      "put": {
+        "tags": ["Resort"],
+        "summary": "Updated Resort",
+        "description": "",
+        "operationId": "resortUpdate",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "resortId",
+            "in": "path",
+            "description": "resort ID that need to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated Resort Object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Resort"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Resort Not Deleted"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Resort": {
+      "type": "object",
+      "required": [
+        "resortName",
+        "address",
+        "cellNo",
+        "email",
+        "isWifiExist",
+        "isBreakfastExist",
+        "isParkingExist",
+        "isOutdoorPoolExist",
+        "isLaundryExist",
+        "isBBQExist"
+      ],
+      "properties": {
+        "resortName": {
+          "type": "string",
+          "example": "Chuti Resort"
+        },
+        "address": {
+          "type": "string",
+          "example": "Gazipur"
+        },
+        "cellNo": {
+          "type": "string",
+          "example": "01689898989"
+        },
+        "email": {
+          "type": "string",
+          "example": "chuti@gmail.com"
+        },
+        "isWifiExist": {
+          "type": "boolean",
+          "example": true
+        },
+        "isBreakfastExist": {
+          "type": "boolean",
+          "example": true
+        },
+        "isParkingExist": {
+          "type": "boolean",
+          "example": true
+        },
+        "isOutdoorPoolExist": {
+          "type": "boolean",
+          "example": true
+        },
+        "isLaundryExist": {
+          "type": "boolean",
+          "example": true
+        },
+        "isBBQExist": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "isExecuted": {
+          "type": "boolean"
+        },
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

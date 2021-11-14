@@ -9,12 +9,28 @@ var path = require("path");
 var app = express();
 require("dotenv").config();
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
+
+var options = {
+  explorer: true,
+};
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, options)
+);
+
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: false }));
 app.use(cookieParser());
 app.use(expressValidator());
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/files/images', express.static(path.join(__dirname + '/files/images')));
+app.use(
+  "/files/images",
+  express.static(path.join(__dirname + "/files/images"))
+);
 
 //To allow cross-origin requests
 app.use(cors());
