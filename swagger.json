@@ -219,9 +219,9 @@
       "type": "object",
       "required": ["roomName"],
       "properties": {
-        "resortName": {
+        "roomName": {
           "type": "string",
-          "example": "Chuti Resort"
+          "example": "Shimul Tola Cabin"
         }
       }
     },
