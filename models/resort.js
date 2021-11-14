@@ -86,6 +86,6 @@ const resortSchema = new mongoose.Schema(
 );
 
 resortSchema.plugin(uniqueValidator);
-const Resort = mongoose.model("item-group", resortSchema);
+const Resort = mongoose.model("resort", resortSchema);
 
 module.exports.Resort = Resort;
