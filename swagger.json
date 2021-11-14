@@ -215,6 +215,16 @@
         }
       }
     },
+    "Rooms": {
+      "type": "object",
+      "required": ["roomName"],
+      "properties": {
+        "resortName": {
+          "type": "string",
+          "example": "Chuti Resort"
+        }
+      }
+    },
     "ApiResponse": {
       "type": "object",
       "properties": {

@@ -44,6 +44,6 @@ const roomsSchema = new mongoose.Schema(
 );
 
 roomsSchema.plugin(uniqueValidator);
-const Rooms = mongoose.model("item-group", roomsSchema);
+const Rooms = mongoose.model("room", roomsSchema);
 
 module.exports.Rooms = Rooms;
