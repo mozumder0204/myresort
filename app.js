@@ -29,7 +29,7 @@ app.use(expressValidator());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   "/files/images",
-  express.static(path.join(__dirname + "/files/images"))
+  express.static(path.join(__dirname + "/files/resortImages"))
 );
 
 //To allow cross-origin requests

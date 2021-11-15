@@ -11,17 +11,27 @@
     {
       "name": "Resort",
       "description": "Operations about resort"
+    },
+    {
+      "name": "Rooms",
+      "description": "Operations about rooms inside a resort"
     }
   ],
-  "schemes": ["http"],
+  "schemes": [
+    "http"
+  ],
   "paths": {
     "/resort/add": {
       "post": {
-        "tags": ["Resort"],
+        "tags": [
+          "Resort"
+        ],
         "summary": "Create resort",
         "description": "This api is for creating new resort",
         "operationId": "resortCreate",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -38,7 +48,9 @@
           "200": {
             "description": "Success",
             "schema": {
-              "items": { "type": "object" }
+              "items": {
+                "type": "object"
+              }
             }
           }
         }
@@ -46,11 +58,15 @@
     },
     "/resort/list": {
       "get": {
-        "tags": ["Resort"],
+        "tags": [
+          "Resort"
+        ],
         "summary": "Resort List",
         "description": "This api is for get all resort",
         "operationId": "resortList",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -58,7 +74,9 @@
               "200": {
                 "description": "Success",
                 "schema": {
-                  "items": { "type": "object" }
+                  "items": {
+                    "type": "object"
+                  }
                 }
               }
             }
@@ -68,11 +86,15 @@
     },
     "/resort/details/{resortId}": {
       "get": {
-        "tags": ["Resort"],
+        "tags": [
+          "Resort"
+        ],
         "summary": "Get resort by resort ID",
         "description": "",
         "operationId": "resortDetails",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "resortId",
@@ -97,11 +119,15 @@
     },
     "/resort/delete/{resortId}": {
       "delete": {
-        "tags": ["Resort"],
+        "tags": [
+          "Resort"
+        ],
         "summary": "Delete Resort",
         "description": "",
         "operationId": "resortDelete",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "resortId",
@@ -123,11 +149,15 @@
     },
     "/resort/update/{resortId}": {
       "put": {
-        "tags": ["Resort"],
+        "tags": [
+          "Resort"
+        ],
         "summary": "Updated Resort",
         "description": "",
         "operationId": "resortUpdate",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "resortId",
@@ -152,6 +182,114 @@
           },
           "400": {
             "description": "Resort Not Deleted"
+          }
+        }
+      }
+    },
+    "/rooms/add": {
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Create Room For A Resort",
+        "description": "This api is for creating new room aginst a resort",
+        "operationId": "roomCreate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created room object",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Rooms"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rooms/list/{resortId}": {
+      "get": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Get Rooms by resort ID",
+        "description": "",
+        "operationId": "roomList",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "resortId",
+            "in": "path",
+            "description": "The resort ID that needs to be fetched room list.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Rooms"
+            }
+          },
+          "400": {
+            "description": "No Data Found !!!"
+          }
+        }
+      }
+    },
+    "/rooms/details/{resortId}/{roomId}": {
+      "get": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Get Room Details by resort ID & room ID",
+        "description": "",
+        "operationId": "roomDetails",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "resortId",
+            "in": "path",
+            "description": "The resort ID that needs to be fetched room details.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "The room ID that needs to be fetched room details.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Rooms"
+            }
+          },
+          "400": {
+            "description": "No Data Found !!!"
           }
         }
       }
@@ -217,11 +355,38 @@
     },
     "Rooms": {
       "type": "object",
-      "required": ["roomName"],
+      "required": [
+        "resortId",
+        "roomName",
+        "description",
+        "price",
+        "isVatIncluded",
+        "imagePath"
+      ],
       "properties": {
+        "resortId": {
+          "type": "string",
+          "example": "6191f939ba267f195e3b5c15"
+        },
         "roomName": {
           "type": "string",
           "example": "Shimul Tola Cabin"
+        },
+        "description": {
+          "type": "string",
+          "example": "2 AC RoomLake View Balcony Wooden deck on lakeLow height 2 king size BedDuck dawn feather pillows Heavenly bed mattress"
+        },
+        "price": {
+          "type": "number",
+          "example": 15000
+        },
+        "isVatIncluded": {
+          "type": "boolean",
+          "example": true
+        },
+        "imagePath": {
+          "type": "string",
+          "example": "base64"
         }
       }
     },

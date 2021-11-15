@@ -2,10 +2,30 @@ const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const roomsSchema = new mongoose.Schema(
   {
+    resortId: {
+      type: String,
+      required: true,
+    },
     roomName: {
       type: String,
       required: true,
       uppercase: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    isVatIncluded: {
+      type: Boolean,
+      required: true,
+    },
+    imagePath: {
+      type: String,
+      required: true,
     },
     createdAt: {
       type: Date,
