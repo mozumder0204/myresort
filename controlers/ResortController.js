@@ -38,6 +38,24 @@ exports.resortList = async (req, res) => {
   }
 };
 
+exports.resortAutoComplete = async (req, res) => {
+  try {
+    await connect();
+    const regexp = new RegExp(`^.*${req.body.item}.*`, "gmi");
+    let data = await Resort.aggregate([
+      {
+        $match: {
+          resortName: regexp,
+          isDisabled: false,
+        },
+      },
+    ]);
+    return apiResponse.successResponseWithData(res, "", data);
+  } catch (err) {
+    return apiResponse.ErrorResponse(res, err.message);
+  }
+};
+
 exports.resortDetails = async (req, res) => {
   try {
     await connect();
