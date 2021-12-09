@@ -8,41 +8,57 @@ var fs = require("fs");
 exports.roomCreate = async (req, res) => {
   try {
     await connect();
-    let imageName = "resort_" + Date.now();
-    imgPath = `http://${req.get("host")}/files/resortImages/${imageName}.jpg`;
 
-    let checkResortExist = await Resort.find({
-      _id: mongoType().ObjectId(req.body.resortId),
-    }).count();
-    if (checkResortExist === 0) {
-      return apiResponse.ErrorResponse(res, "Resort Not Found!");
+    if (req.body.roomList.length) {
+      for (let i = 0; i < req.body.roomList.length; i++) {
+        const bot = req.body.roomList[i];
+
+        let imageName = "resort_" + mongoType().ObjectId();
+        imgPath = `http://${req.get(
+          "host"
+        )}/files/resortImages/${imageName}.jpg`;
+
+        let checkResortExist = await Resort.find({
+          _id: mongoType().ObjectId(bot.resortId),
+        }).count();
+        if (checkResortExist === 0) {
+          return apiResponse.ErrorResponse(
+            res,
+            `Resort Not Found! - ${bot.roomName}`
+          );
+        }
+
+        let rooms = new Rooms({
+          resortId: bot.resortId,
+          roomName: bot.roomName,
+          description: bot.description,
+          price: bot.price,
+          isVatIncluded: bot.isVatIncluded,
+          imagePath: imgPath,
+          createdAt: new Date(),
+          createdBy: `Admin`,
+          isDisabled: false,
+        });
+
+        await rooms.save(function (err, doc) {
+          if (err) {
+            return apiResponse.ErrorResponse(res, err);
+          }
+          if (doc) {
+            fs.writeFileSync(
+              "./files/resortImages/" + imageName + ".jpg",
+              bot.imagePath,
+              "base64"
+            );
+          }
+        });
+        console.log(i);
+      }
+    } else {
+      return apiResponse.ErrorResponse(res, `No Rooms Found~`);
     }
 
-    let rooms = new Rooms({
-      resortId: req.body.resortId,
-      roomName: req.body.roomName,
-      description: req.body.description,
-      price: req.body.price,
-      isVatIncluded: req.body.isVatIncluded,
-      imagePath: imgPath,
-      createdAt: new Date(),
-      createdBy: `Admin`,
-      isDisabled: false,
-    });
-
-    await rooms.save(function (err, doc) {
-      if (err) {
-        return apiResponse.ErrorResponse(res, err);
-      }
-      if (doc) {
-        fs.writeFileSync(
-          "./files/resortImages/" + imageName + ".jpg",
-          req.body.imagePath,
-          "base64"
-        );
-      }
-    });
-    return apiResponse.successResponseWithData(res, "Success", rooms);
+    return apiResponse.successResponse(res, "Success");
   } catch (err) {
     return apiResponse.ErrorResponse(res, err.message);
   }
