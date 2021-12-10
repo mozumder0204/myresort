@@ -8,7 +8,6 @@ var fs = require("fs");
 exports.roomCreate = async (req, res) => {
   try {
     await connect();
-
     if (req.body.roomList.length) {
       for (let i = 0; i < req.body.roomList.length; i++) {
         const bot = req.body.roomList[i];
@@ -67,10 +66,170 @@ exports.roomCreate = async (req, res) => {
 exports.roomList = async (req, res) => {
   try {
     await connect();
-    let data = await Rooms.find({
-      resortId: req.params.resortId,
-      isDisabled: false,
-    });
+    let data = await Rooms.aggregate([
+      {
+        $match: {
+          isDisabled: false,
+        },
+      },
+      {
+        $project: {
+          resortId: 1,
+          roomName: 1,
+          description: 1,
+          price: 1,
+          isVatIncluded: 1,
+          imagePath: 1,
+          createdAt: 1,
+          createdBy: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: "resorts",
+          let: {
+            rtId: {
+              $convert: {
+                input: "$resortId",
+                to: "objectId",
+              },
+            },
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$_id", "$$rtId"],
+                },
+                isDisabled: false,
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                resortName: 1,
+              },
+            },
+          ],
+          as: "resortInfo",
+        },
+      },
+      {
+        $project: {
+          resortId: 1,
+          roomName: 1,
+          description: 1,
+          price: 1,
+          isVatIncluded: 1,
+          imagePath: 1,
+          createdAt: 1,
+          createdBy: 1,
+          resortInfo: {
+            $arrayElemAt: ["$resortInfo", 0],
+          },
+        },
+      },
+      {
+        $project: {
+          resortId: 1,
+          roomName: 1,
+          description: 1,
+          price: 1,
+          isVatIncluded: 1,
+          imagePath: 1,
+          createdAt: 1,
+          createdBy: 1,
+          resortName: "$resortInfo.resortName",
+        },
+      },
+    ]);
+    return apiResponse.successResponseWithData(res, "", data);
+  } catch (err) {
+    return apiResponse.ErrorResponse(res, err.message);
+  }
+};
+
+exports.roomListByResortId = async (req, res) => {
+  try {
+    await connect();
+    let data = await Rooms.aggregate([
+      {
+        $match: {
+          resortId: req.params.resortId,
+          isDisabled: false,
+        },
+      },
+      {
+        $project: {
+          resortId: 1,
+          roomName: 1,
+          description: 1,
+          price: 1,
+          isVatIncluded: 1,
+          imagePath: 1,
+          createdAt: 1,
+          createdBy: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: "resorts",
+          let: {
+            rtId: {
+              $convert: {
+                input: "$resortId",
+                to: "objectId",
+              },
+            },
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$_id", "$$rtId"],
+                },
+                isDisabled: false,
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                resortName: 1,
+              },
+            },
+          ],
+          as: "resortInfo",
+        },
+      },
+      {
+        $project: {
+          resortId: 1,
+          roomName: 1,
+          description: 1,
+          price: 1,
+          isVatIncluded: 1,
+          imagePath: 1,
+          createdAt: 1,
+          createdBy: 1,
+          resortInfo: {
+            $arrayElemAt: ["$resortInfo", 0],
+          },
+        },
+      },
+      {
+        $project: {
+          resortId: 1,
+          roomName: 1,
+          description: 1,
+          price: 1,
+          isVatIncluded: 1,
+          imagePath: 1,
+          createdAt: 1,
+          createdBy: 1,
+          resortName: "$resortInfo.resortName",
+        },
+      },
+    ]);
     return apiResponse.successResponseWithData(res, "", data);
   } catch (err) {
     return apiResponse.ErrorResponse(res, err.message);
@@ -80,16 +239,121 @@ exports.roomList = async (req, res) => {
 exports.roomDetails = async (req, res) => {
   try {
     await connect();
-    let data = await Rooms.find({
-      resortId: req.params.resortId,
-      _id: mongoType().ObjectId(req.params.roomId),
-      isDisabled: false,
-    });
+    let data = await Rooms.aggregate([
+      {
+        $match: {
+          _id: mongoType().ObjectId(req.params.roomId),
+          resortId: req.params.resortId,
+          isDisabled: false,
+        },
+      },
+      {
+        $project: {
+          resortId: 1,
+          roomName: 1,
+          description: 1,
+          price: 1,
+          isVatIncluded: 1,
+          imagePath: 1,
+          createdAt: 1,
+          createdBy: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: "resorts",
+          let: {
+            rtId: {
+              $convert: {
+                input: "$resortId",
+                to: "objectId",
+              },
+            },
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$_id", "$$rtId"],
+                },
+                isDisabled: false,
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                resortName: 1,
+                address: 1,
+                cellNo: 1,
+              },
+            },
+          ],
+          as: "resortInfo",
+        },
+      },
+      {
+        $project: {
+          resortId: 1,
+          roomName: 1,
+          description: 1,
+          price: 1,
+          isVatIncluded: 1,
+          imagePath: 1,
+          createdAt: 1,
+          createdBy: 1,
+          resortInfo: {
+            $arrayElemAt: ["$resortInfo", 0],
+          },
+        },
+      },
+      {
+        $project: {
+          resortId: 1,
+          roomName: 1,
+          description: 1,
+          price: 1,
+          isVatIncluded: 1,
+          imagePath: 1,
+          createdAt: 1,
+          createdBy: 1,
+          resortName: "$resortInfo.resortName",
+          resortAddress: "$resortInfo.address",
+          resortCellNo: "$resortInfo.cellNo",
+        },
+      },
+    ]);
     return apiResponse.successResponseWithData(
       res,
       "",
       data.length ? data[0] : {}
     );
+  } catch (err) {
+    return apiResponse.ErrorResponse(res, err.message);
+  }
+};
+
+exports.roomDelete = async (req, res) => {
+  try {
+    await connect();
+    let deleteRoom = await Rooms.updateOne(
+      {
+        _id: mongoType().ObjectId(req.params.roomId),
+        isDisabled: false,
+      },
+      {
+        $set: {
+          isDisabled: true,
+        },
+      }
+    );
+
+    if (deleteRoom.n === 0) {
+      return apiResponse.ErrorResponse(res, `Room Not Found`);
+    }
+    if (deleteRoom.nModified === 0) {
+      return apiResponse.ErrorResponse(res, `Room Not Deleted`);
+    }
+    return apiResponse.successResponse(res, "Room Deleted");
   } catch (err) {
     return apiResponse.ErrorResponse(res, err.message);
   }

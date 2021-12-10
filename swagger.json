@@ -17,21 +17,15 @@
       "description": "Operations about rooms inside a resort"
     }
   ],
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "paths": {
     "/resort/add": {
       "post": {
-        "tags": [
-          "Resort"
-        ],
+        "tags": ["Resort"],
         "summary": "Create resort",
         "description": "This api is for creating new resort",
         "operationId": "resortCreate",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -58,14 +52,52 @@
     },
     "/resort/list": {
       "get": {
-        "tags": [
-          "Resort"
-        ],
+        "tags": ["Resort"],
         "summary": "Resort List",
         "description": "This api is for get all resort",
         "operationId": "resortList",
-        "produces": [
-          "application/json"
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "200": {
+                "description": "Success",
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resort/autocomplete": {
+      "post": {
+        "tags": ["Resort"],
+        "summary": "Resort Auto-Complete",
+        "description": "This api is for get resort autocomplete list",
+        "operationId": "resortAutoComplete",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Passing autocomplete search valuet",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["item"],
+              "properties": {
+                "item": {
+                  "type": "string",
+                  "example": "borno"
+                }
+              }
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -86,15 +118,11 @@
     },
     "/resort/details/{resortId}": {
       "get": {
-        "tags": [
-          "Resort"
-        ],
+        "tags": ["Resort"],
         "summary": "Get resort by resort ID",
         "description": "",
         "operationId": "resortDetails",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "resortId",
@@ -119,15 +147,11 @@
     },
     "/resort/delete/{resortId}": {
       "delete": {
-        "tags": [
-          "Resort"
-        ],
+        "tags": ["Resort"],
         "summary": "Delete Resort",
         "description": "",
         "operationId": "resortDelete",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "resortId",
@@ -149,15 +173,11 @@
     },
     "/resort/update/{resortId}": {
       "put": {
-        "tags": [
-          "Resort"
-        ],
+        "tags": ["Resort"],
         "summary": "Updated Resort",
         "description": "",
         "operationId": "resortUpdate",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "resortId",
@@ -188,15 +208,11 @@
     },
     "/rooms/add": {
       "post": {
-        "tags": [
-          "Rooms"
-        ],
+        "tags": ["Rooms"],
         "summary": "Create Room For A Resort",
         "description": "This api is for creating new room aginst a resort",
         "operationId": "roomCreate",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -221,17 +237,41 @@
         }
       }
     },
-    "/rooms/list/{resortId}": {
+    "/rooms/list": {
       "get": {
-        "tags": [
-          "Rooms"
-        ],
-        "summary": "Get Rooms by resort ID",
+        "tags": ["Rooms"],
+        "summary": "Get ALL Rooms",
         "description": "",
         "operationId": "roomList",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "items": {
+                "type": "array",
+                "$ref": "#/definitions/Rooms"
+              }
+            }
+          },
+          "400": {
+            "description": "No Data Found !!!",
+            "schema": {
+              "items": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rooms/list/{resortId}": {
+      "get": {
+        "tags": ["Rooms"],
+        "summary": "Get Rooms by resort ID",
+        "description": "",
+        "operationId": "roomListByResortId",
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "resortId",
@@ -256,15 +296,11 @@
     },
     "/rooms/details/{resortId}/{roomId}": {
       "get": {
-        "tags": [
-          "Rooms"
-        ],
+        "tags": ["Rooms"],
         "summary": "Get Room Details by resort ID & room ID",
         "description": "",
         "operationId": "roomDetails",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "resortId",
@@ -290,6 +326,32 @@
           },
           "400": {
             "description": "No Data Found !!!"
+          }
+        }
+      }
+    },
+    "/rooms/delete/{roomId}": {
+      "delete": {
+        "tags": ["Rooms"],
+        "summary": "Delete Room",
+        "description": "",
+        "operationId": "roomDelete",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "Room ID that need to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Room Not Deleted"
           }
         }
       }
