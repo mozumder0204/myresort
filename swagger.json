@@ -15,6 +15,10 @@
     {
       "name": "Rooms",
       "description": "Operations about rooms inside a resort"
+    },
+    {
+      "name": "Admin",
+      "description": "Operations about admin of the application"
     }
   ],
   "schemes": ["http"],
@@ -355,6 +359,102 @@
           }
         }
       }
+    },
+    "/admin/add": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Create admin",
+        "description": "This api is for creating new admin",
+        "operationId": "adminCreate",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created admin object",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/list": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Admin List",
+        "description": "This api is for get all admin",
+        "operationId": "adminList",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "200": {
+                "description": "Success",
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/signin": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Admin Signin",
+        "description": "This api is for login as a admin",
+        "operationId": "adminSignin",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Admin Signin by CellNo & Password",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["cellNo", "password"],
+              "properties": {
+                "cellNo": {
+                  "type": "string",
+                  "example": "01687412201"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "123456"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -449,6 +549,32 @@
         "imagePath": {
           "type": "string",
           "example": "base64"
+        }
+      }
+    },
+    "Admin": {
+      "type": "object",
+      "required": ["fullName", "cellNo", "email", "category", "password"],
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "example": "Phunsukh Wangdu"
+        },
+        "cellNo": {
+          "type": "string",
+          "example": "01687412201"
+        },
+        "email": {
+          "type": "string",
+          "example": "phunsukh@gmail.com"
+        },
+        "category": {
+          "type": "string",
+          "example": "superAdmin"
+        },
+        "password": {
+          "type": "string",
+          "example": "123456"
         }
       }
     },
